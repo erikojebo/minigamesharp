@@ -11,18 +11,21 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
         private readonly Vector _upVector = new(0, -1);
         private Vector _velocity;
 
+        public AsteroidsGame()
+        {
+            BackgroundColor = Color.Black;
+            Left = 0;
+            Top = 0;
+            Width = 1000;
+            Height = 900;
+        }
+
         protected override void OnStart()
         {
             _shipTriangle = new Triangle(100, 100, 20, 40, Color.White);
             AddShape(_shipTriangle);
 
             _velocity = _upVector;
-            
-            BackgroundColor = Color.Black;
-            Left = 0;
-            Top = 0;
-            Width = 1000;
-            Height = 900;
         }
 
         protected override void OnUpdate()

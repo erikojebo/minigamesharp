@@ -6,7 +6,6 @@ namespace MiniGameSharp.Shapes
     {
         public Rectangle()
         {
-            
         }
 
         public Rectangle(int x, int y, int width, int height, Color color)
@@ -30,6 +29,5 @@ namespace MiniGameSharp.Shapes
             graphics.RotateTransform(Angle);
             graphics.FillRectangle(Brush, -Width / 2, -Height / 2, Width, Height);
         }
-
     }
 }

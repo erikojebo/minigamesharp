@@ -11,8 +11,4 @@
       <ProjectReference Include="..\MiniGameSharp\MiniGameSharp.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Asteroids\GameObjects" />
-    </ItemGroup>
-
 </Project>
