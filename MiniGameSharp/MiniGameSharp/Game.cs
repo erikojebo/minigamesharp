@@ -107,7 +107,7 @@ namespace MiniGameSharp
                 {
                     shouldRender = true;
                     
-                    OnUpdate();
+                    PerformUpdate();
                     accumulator -= timePerFrame;
                     updatesCounter += 1;
                 }
@@ -127,7 +127,17 @@ namespace MiniGameSharp
         protected virtual void OnStart()
         {
         }
-        
+
+        private void PerformUpdate()
+        {
+            foreach (var shape in _shapes)
+            {
+                shape.X += shape.Velocity.X;
+                shape.Y += shape.Velocity.Y;
+            }
+            
+            OnUpdate();
+        }
         protected virtual void OnUpdate()
         {
         }

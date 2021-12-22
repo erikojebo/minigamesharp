@@ -9,7 +9,6 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
     {
         private Triangle _shipTriangle;
         private readonly Vector _upVector = new(0, -1);
-        private Vector _velocity;
 
         public AsteroidsGame()
         {
@@ -25,14 +24,11 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
             _shipTriangle = new Triangle(100, 100, 20, 40, Color.White);
             AddShape(_shipTriangle);
 
-            _velocity = _upVector;
+           _shipTriangle.Velocity = _upVector;
         }
 
         protected override void OnUpdate()
         {
-            _shipTriangle.X += _velocity.X;
-            _shipTriangle.Y += _velocity.Y;
-
             if (IsKeyDown(Key.Left))
             {
                 _shipTriangle.Angle -= 5;
@@ -48,7 +44,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                 var thrustVectorScale = 0.25f;
                 var thrustVector = _upVector.Rotate(_shipTriangle.Angle).Scale(thrustVectorScale);
 
-                _velocity = _velocity.Add(thrustVector).CapLength(7);
+                _shipTriangle.Velocity = _shipTriangle.Velocity.Add(thrustVector).CapLength(7);
             }
 
             if (_shipTriangle.X > Width)
