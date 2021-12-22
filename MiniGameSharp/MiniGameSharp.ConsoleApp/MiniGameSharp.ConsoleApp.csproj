@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0-windows</TargetFramework>
+        <AssemblyName>MiniGameSharp.ConsoleApp</AssemblyName>
+        <RootNamespace>MiniGameSharp.ConsoleApp</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MiniGameSharp\MiniGameSharp.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Asteroids\GameObjects" />
+    </ItemGroup>
+
+</Project>
