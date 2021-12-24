@@ -44,7 +44,7 @@
             return new Vector(X + vector.X, Y + vector.Y);
         }
 
-        public Vector Scale(float scaleFactor)
+        public readonly Vector Scale(float scaleFactor)
         {
             return new Vector(X * scaleFactor, Y * scaleFactor);
         }

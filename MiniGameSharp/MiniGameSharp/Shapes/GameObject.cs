@@ -12,5 +12,7 @@ namespace MiniGameSharp.Shapes
         public Vector Velocity { get; set; }
         
         public abstract void Render(Graphics graphics);
+
+        public abstract BoundingBox BoundingBoxSize();
     }
 }

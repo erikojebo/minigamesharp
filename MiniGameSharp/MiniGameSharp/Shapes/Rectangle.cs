@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using MiniGameSharp.Math;
 
 namespace MiniGameSharp.Shapes
 {
@@ -28,6 +29,12 @@ namespace MiniGameSharp.Shapes
             graphics.TranslateTransform(xCenter, yCenter);
             graphics.RotateTransform(Angle);
             graphics.FillRectangle(Brush, -Width / 2, -Height / 2, Width, Height);
+            graphics.ResetTransform();
+        }
+
+        public override BoundingBox BoundingBoxSize()
+        {
+            return new BoundingBox(Width, Height);
         }
     }
 }
