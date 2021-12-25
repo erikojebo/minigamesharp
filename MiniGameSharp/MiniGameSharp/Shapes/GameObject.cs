@@ -13,6 +13,6 @@ namespace MiniGameSharp.Shapes
         
         public abstract void Render(Graphics graphics);
 
-        public abstract BoundingBox BoundingBoxSize();
+        public abstract BoundingBox BoundingBox();
     }
 }

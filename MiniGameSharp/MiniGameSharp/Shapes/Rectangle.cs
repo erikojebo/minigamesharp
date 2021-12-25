@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using MiniGameSharp.Collisions;
 using MiniGameSharp.Math;
 
 namespace MiniGameSharp.Shapes
@@ -32,9 +33,14 @@ namespace MiniGameSharp.Shapes
             graphics.ResetTransform();
         }
 
-        public override BoundingBox BoundingBoxSize()
+        public override BoundingBox BoundingBox()
         {
-            return new BoundingBox(Width, Height);
+            return new BoundingBox(X, Y, Width, Height);
+        }
+
+        public bool HasCollidedWith(GameObject otherObject)
+        {
+            return CollisionDetector.IsCollision(BoundingBox(), otherObject.BoundingBox());
         }
     }
 }

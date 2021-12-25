@@ -39,6 +39,11 @@
                 X * (float)System.Math.Sin(angleInRadians) + Y * (float)System.Math.Cos(angleInRadians));
         }
 
+        public Vector Add(float x, float y)
+        {
+            return new Vector(X + x, Y + y);
+        }
+        
         public Vector Add(Vector vector)
         {
             return new Vector(X + vector.X, Y + vector.Y);
@@ -47,6 +52,11 @@
         public readonly Vector Scale(float scaleFactor)
         {
             return new Vector(X * scaleFactor, Y * scaleFactor);
+        }
+
+        public override string ToString()
+        {
+            return $"({X},{Y})";
         }
     }
 }

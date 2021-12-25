@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Input;
+using MiniGameSharp.Collisions;
 using MiniGameSharp.Math;
 using MiniGameSharp.Shapes;
 using Rectangle = MiniGameSharp.Shapes.Rectangle;
@@ -72,6 +73,14 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                 _shipTriangle.Velocity = _shipTriangle.Velocity.Add(thrustVector).CapLength(7);
             }
 
+            foreach (var asteroid in _asteroids)
+            {
+                if (asteroid.HasCollidedWith(_shipTriangle))
+                {
+                    
+                }
+            }
+
             foreach (var obj in _boundsWrapObjects)
             {
                 WrapBounds(obj);
@@ -80,7 +89,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
 
         private void WrapBounds(GameObject asteroid)
         {
-            var bounds = asteroid.BoundingBoxSize();
+            var bounds = asteroid.BoundingBox();
             
             if (asteroid.X > Width)
             {
