@@ -1,0 +1,2 @@
+﻿* Polygon collision detection
+* Polygon bounding boxes
