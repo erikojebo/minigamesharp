@@ -50,5 +50,21 @@ namespace MiniGameSharp.Tests
                     new Vector(-2, 0)
                 }, box.Corners);
         }
+        
+        [Test]
+        public void Can_get_corners_for_rotated_box_with_offset()
+        {
+            // (0,0) -> (-2,1)
+            var box = new BoundingBox(10, 20, 1, 2, 90);
+ 
+            CollectionAssert.AreEquivalent(
+                new []
+                {
+                    new Vector(10, 20),
+                    new Vector(10, 21),
+                    new Vector(8, 21),
+                    new Vector(8, 20)
+                }, box.Corners);
+        }
     }
 }
