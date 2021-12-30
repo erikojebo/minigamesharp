@@ -10,7 +10,7 @@
 
         public float X { get; set; }
         public float Y { get; set; }
-        
+
         public float Length => (float)System.Math.Sqrt(X * X + Y * Y);
 
         public Vector Resize(float length)
@@ -34,16 +34,21 @@
         {
             var angleInRadians = angleInDegrees / 360 * System.Math.PI * 2;
 
-            return new Vector(
-                X * (float)System.Math.Cos(angleInRadians) - Y * (float)System.Math.Sin(angleInRadians),
-                X * (float)System.Math.Sin(angleInRadians) + Y * (float)System.Math.Cos(angleInRadians));
+            var newX = X * (float)System.Math.Cos(angleInRadians) - Y * (float)System.Math.Sin(angleInRadians);
+            var newY = X * (float)System.Math.Sin(angleInRadians) + Y * (float)System.Math.Cos(angleInRadians);
+
+            // Avoid float rounding errors to make debugging and testing easier
+            newX = (float)System.Math.Round(newX, 8);
+            newY = (float)System.Math.Round(newY, 8);
+            
+            return new Vector(newX, newY);
         }
 
         public Vector Add(float x, float y)
         {
             return new Vector(X + x, Y + y);
         }
-        
+
         public Vector Add(Vector vector)
         {
             return new Vector(X + vector.X, Y + vector.Y);

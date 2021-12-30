@@ -26,15 +26,15 @@ namespace MiniGameSharp.Math
                 var verticalEdge = new Vector(0, Height);
                 var horizontalEdge = new Vector(Width, 0);
                 
-                var rotatedVerticalEdge = verticalEdge.Rotate(Angle).Add(X, Y);
-                var rotatedHorizontalEdge = horizontalEdge.Rotate(Angle).Add(X, Y);
+                var rotatedVerticalEdge = verticalEdge.Rotate(Angle);
+                var rotatedHorizontalEdge = horizontalEdge.Rotate(Angle);
                 
                 return new()
                 {
                     new Vector(X, Y),
-                    rotatedHorizontalEdge,
-                    rotatedVerticalEdge,
-                    verticalEdge.Add(horizontalEdge).Add(X, Y)
+                    rotatedHorizontalEdge.Add(X, Y),
+                    rotatedVerticalEdge.Add(X, Y),
+                    rotatedVerticalEdge.Add(rotatedHorizontalEdge).Add(X, Y)
                 };
             }
         }

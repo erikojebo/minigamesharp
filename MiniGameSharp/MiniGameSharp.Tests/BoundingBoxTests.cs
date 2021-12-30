@@ -34,5 +34,21 @@ namespace MiniGameSharp.Tests
                     new Vector(10, 22)
                 }, box.Corners);
         }
+        
+        [Test]
+        public void Can_get_corners_from_rotated_box_without_offset()
+        {
+            // (0,0) -> (-2,1)
+            var box = new BoundingBox(0, 0, 1, 2, 90);
+ 
+            CollectionAssert.AreEquivalent(
+                new []
+                {
+                    new Vector(0, 0),
+                    new Vector(0, 1),
+                    new Vector(-2, 1),
+                    new Vector(-2, 0)
+                }, box.Corners);
+        }
     }
 }
