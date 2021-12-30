@@ -68,5 +68,10 @@
         {
             return $"({X},{Y})";
         }
+
+        public float DotProduct(Vector v)
+        {
+            return X * v.X + Y * v.Y;
+        }
     }
 }
