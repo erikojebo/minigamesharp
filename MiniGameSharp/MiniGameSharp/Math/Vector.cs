@@ -13,6 +13,11 @@
 
         public float Length => (float)System.Math.Sqrt(X * X + Y * Y);
 
+        public Vector Normalize()
+        {
+            return Resize(1);
+        }
+
         public Vector Resize(float length)
         {
             var scaleFactor = length / Length;
@@ -40,7 +45,7 @@
             // Avoid float rounding errors to make debugging and testing easier
             newX = (float)System.Math.Round(newX, 8);
             newY = (float)System.Math.Round(newY, 8);
-            
+
             return new Vector(newX, newY);
         }
 
