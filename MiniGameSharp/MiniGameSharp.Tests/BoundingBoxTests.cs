@@ -23,7 +23,16 @@ namespace MiniGameSharp.Tests
         [Test]
         public void Can_get_corners_for_unrotated_box_with_offset()
         {
-            
+            var box = new BoundingBox(10, 20, 1, 2);
+
+            CollectionAssert.AreEquivalent(
+                new []
+                {
+                    new Vector(10, 20),
+                    new Vector(11, 20),
+                    new Vector(11, 22),
+                    new Vector(10, 22)
+                }, box.Corners);
         }
     }
 }

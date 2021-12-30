@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace MiniGameSharp.Math
 {
@@ -24,14 +23,18 @@ namespace MiniGameSharp.Math
         {
             get
             {
-                var rotatedVerticalEdge = new Vector(0, Height).Rotate(Angle).Add(X, Y);
-                var rotatedHorizontalEdge = new Vector(Width, 0).Rotate(Angle).Add(X, Y);
+                var verticalEdge = new Vector(0, Height);
+                var horizontalEdge = new Vector(Width, 0);
+                
+                var rotatedVerticalEdge = verticalEdge.Rotate(Angle).Add(X, Y);
+                var rotatedHorizontalEdge = horizontalEdge.Rotate(Angle).Add(X, Y);
+                
                 return new()
                 {
                     new Vector(X, Y),
                     rotatedHorizontalEdge,
                     rotatedVerticalEdge,
-                    rotatedVerticalEdge.Add(rotatedHorizontalEdge)
+                    verticalEdge.Add(horizontalEdge).Add(X, Y)
                 };
             }
         }
