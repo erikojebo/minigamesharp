@@ -13,9 +13,47 @@ namespace MiniGameSharp.Collisions
             return IsCollision(box1, box2);
         }
 
-        public static bool IsCollision(BoundingBox box1, BoundingBox box2)
+        public static bool IsCollision(BoundingBoxPolygon box1, BoundingBoxPolygon box2)
         {
             return false;
+        }
+
+        public static bool IsCollision(Vector v, BoundingBoxPolygon box)
+        {
+            // Is point within polygon?
+
+            var intersectionLineY = v.Y;
+
+            var leftIntersections = 0;
+            var rightIntersections = 0;
+
+            foreach (var line in box.Lines)
+            {
+                if (line.YMax < v.Y || line.YMin > v.Y)
+                {
+                    continue;
+                }
+
+                // if (line.Y1 == v.Y || line.Y2 == v.Y)
+                // {
+                //     return true; // Is this a collision?
+                // }
+
+                if (line.XMax < v.X)
+                {
+                    leftIntersections++;
+                } 
+                else if (line.XMin > v.X)
+                {
+                    rightIntersections++;
+                }
+                else
+                {
+                    // Find intersection x between lines and check if it is left or right
+                }
+            }
+
+            return leftIntersections % 2 != 0;
         }
     }
 }

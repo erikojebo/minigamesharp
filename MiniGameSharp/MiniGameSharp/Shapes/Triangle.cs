@@ -42,9 +42,9 @@ namespace MiniGameSharp.Shapes
             graphics.ResetTransform();
         }
 
-        public override BoundingBox BoundingBox()
+        public override BoundingBoxRectangle BoundingBox()
         {
-            return new BoundingBox(X, Y, Width, Height);
+            return new BoundingBoxRectangle(X, Y, Width, Height);
         }
     }
 }

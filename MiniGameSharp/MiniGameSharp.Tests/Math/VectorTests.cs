@@ -1,7 +1,7 @@
 ﻿using MiniGameSharp.Math;
 using NUnit.Framework;
 
-namespace MiniGameSharp.Tests
+namespace MiniGameSharp.Tests.Math
 {
     public class VectorTests
     {

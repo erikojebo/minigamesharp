@@ -1,14 +1,14 @@
 ﻿using MiniGameSharp.Math;
 using NUnit.Framework;
 
-namespace MiniGameSharp.Tests
+namespace MiniGameSharp.Tests.Math
 {
     public class BoundingBoxTests
     {
         [Test]
         public void Can_get_corners_for_unrotated_box_without_offset()
         {
-            var box = new BoundingBox(0, 0, 1, 2);
+            var box = new BoundingBoxRectangle(0, 0, 1, 2);
 
             CollectionAssert.AreEquivalent(
                 new []
@@ -23,7 +23,7 @@ namespace MiniGameSharp.Tests
         [Test]
         public void Can_get_corners_for_unrotated_box_with_offset()
         {
-            var box = new BoundingBox(10, 20, 1, 2);
+            var box = new BoundingBoxRectangle(10, 20, 1, 2);
 
             CollectionAssert.AreEquivalent(
                 new []
@@ -39,7 +39,7 @@ namespace MiniGameSharp.Tests
         public void Can_get_corners_from_rotated_box_without_offset()
         {
             // (0,0) -> (-2,1)
-            var box = new BoundingBox(0, 0, 1, 2, 90);
+            var box = new BoundingBoxRectangle(0, 0, 1, 2, 90);
  
             CollectionAssert.AreEquivalent(
                 new []
@@ -55,7 +55,7 @@ namespace MiniGameSharp.Tests
         public void Can_get_corners_for_rotated_box_with_offset()
         {
             // (0,0) -> (-2,1)
-            var box = new BoundingBox(10, 20, 1, 2, 90);
+            var box = new BoundingBoxRectangle(10, 20, 1, 2, 90);
  
             CollectionAssert.AreEquivalent(
                 new []
