@@ -50,6 +50,13 @@ namespace MiniGameSharp.Collisions
                 else
                 {
                     // Find intersection x between lines and check if it is left or right
+                    var crossingPointOffset = (v.Y - line.Y1) * (line.X2 - line.X1) / (line.Y2 - line.Y1);
+                    var crossingPointX = line.X1 + crossingPointOffset;
+
+                    if (crossingPointX <= v.X)
+                    {
+                        leftIntersections++;
+                    }
                 }
             }
 

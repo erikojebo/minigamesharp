@@ -19,7 +19,16 @@ namespace MiniGameSharp.Tests
                 }
             );
             
-            Assert.IsTrue(CollisionDetector.IsCollision(new Vector(1.5f, 1.5f), box));
+            AssertCollision(true, new Vector(1.5f, 1.5f), box);
+            AssertCollision(false, new Vector(2.5f, 1.5f), box);
+            AssertCollision(true, new Vector(1f, 1.5f), box);
+            AssertCollision(false, new Vector(2.5f, 2.5f), box);
+            AssertCollision(false, new Vector(1.5f, 2.5f), box);
+        }
+
+        private static void AssertCollision(bool expected, Vector point, BoundingBoxPolygon box)
+        {
+            Assert.AreEqual(expected, CollisionDetector.IsCollision(point, box));
         }
     }
 }
