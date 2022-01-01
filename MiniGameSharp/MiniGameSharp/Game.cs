@@ -12,7 +12,7 @@ namespace MiniGameSharp
     public class Game
     {
         private readonly GameForm _form;
-        private readonly List<Shape> _shapes = new();
+        private readonly List<GameObject> _gameObjects = new();
         private bool _isShuttingDown;
         private bool _isPaused = false;
 
@@ -134,14 +134,15 @@ namespace MiniGameSharp
             if (_isPaused)
                 return;
             
-            foreach (var shape in _shapes)
+            foreach (var obj in _gameObjects)
             {
-                shape.X += shape.Velocity.X;
-                shape.Y += shape.Velocity.Y;
+                obj.X += obj.Velocity.X;
+                obj.Y += obj.Velocity.Y;
             }
             
             OnUpdate();
         }
+        
         protected virtual void OnUpdate()
         {
         }
@@ -150,15 +151,15 @@ namespace MiniGameSharp
         {
             g.Clear(BackgroundColor);
             
-            foreach (var shape in _shapes)
+            foreach (var shape in _gameObjects)
             {
                 shape.Render(g);
             }
         }
 
-        public void AddShape(Shape shape)
+        public void AddGameObject(GameObject gameObject)
         {
-            _shapes.Add(shape);
+            _gameObjects.Add(gameObject);
         }
 
         public bool IsKeyDown(Key key)

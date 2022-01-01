@@ -10,7 +10,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
 {
     public class AsteroidsGame : Game
     {
-        private Triangle _shipTriangle;
+        private Polygon _ship;
         private readonly Vector _upVector = new(0, -1);
         private readonly List<Rectangle> _asteroids = new();
         private readonly List<GameObject> _boundsWrapObjects = new();
@@ -28,12 +28,21 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
 
         protected override void OnStart()
         {
-            _shipTriangle = new Triangle(Width / 2, Height / 2, 20, 40, Color.White);
-            _boundsWrapObjects.Add(_shipTriangle);
+            const float shipHeight = 40;
+            const float shipWidth = 20;
+            
+            _ship = new Polygon(Width / 2f, Height / 2f,
+                new Vector(-shipWidth / 2, shipHeight * 1/3f),
+                new Vector(shipWidth / 2, shipHeight * 1/3f),
+                new Vector(0, -shipHeight * 2/3f)); 
+            
+            // (Width / 2, Height / 2, 20, 40, Color.White);
+            
+            _boundsWrapObjects.Add(_ship);
 
-            AddShape(_shipTriangle);
+            AddGameObject(_ship);
 
-            _shipTriangle.Velocity = _upVector.Scale(0);
+            _ship.Velocity = _upVector.Scale(0);
 
             for (int i = 0; i < 10; i++)
             {
@@ -45,7 +54,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
 
                 asteroidRectangle.Velocity = directionVector.Scale(2);
 
-                AddShape(asteroidRectangle);
+                AddGameObject(asteroidRectangle);
 
                 _asteroids.Add(asteroidRectangle);
                 _boundsWrapObjects.Add(asteroidRectangle);
@@ -56,25 +65,25 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
         {
             if (IsKeyDown(Key.Left))
             {
-                _shipTriangle.Angle -= 5;
+                _ship.Angle -= 5;
             }
 
             if (IsKeyDown(Key.Right))
             {
-                _shipTriangle.Angle += 5;
+                _ship.Angle += 5;
             }
 
             if (IsKeyDown(Key.Up))
             {
                 var thrustVectorScale = 0.20f;
-                var thrustVector = _upVector.Rotate(_shipTriangle.Angle).Scale(thrustVectorScale);
+                var thrustVector = _upVector.Rotate(_ship.Angle).Scale(thrustVectorScale);
 
-                _shipTriangle.Velocity = _shipTriangle.Velocity.Add(thrustVector).CapLength(7);
+                _ship.Velocity = _ship.Velocity.Add(thrustVector).CapLength(7);
             }
 
             foreach (var asteroid in _asteroids)
             {
-                if (asteroid.HasCollidedWith(_shipTriangle))
+                if (asteroid.HasCollidedWith(_ship))
                 {
                     Pause();
                 }
@@ -92,20 +101,20 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
             
             if (asteroid.X > Width)
             {
-                asteroid.X = -bounds.Width;
+                asteroid.X = -bounds.OuterWidth;
             }
 
-            if (asteroid.X + bounds.Width < 0)
+            if (asteroid.X + bounds.OuterWidth < 0)
             {
                 asteroid.X = Width;
             }
 
             if (asteroid.Y > Height)
             {
-                asteroid.Y = -bounds.Height;
+                asteroid.Y = -bounds.OuterHeight;
             }
 
-            if (asteroid.Y + bounds.Height < 0)
+            if (asteroid.Y + bounds.OuterHeight < 0)
             {
                 asteroid.Y = Height;
             }

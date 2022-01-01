@@ -1,2 +1,6 @@
-﻿* Polygon collision detection
-* Polygon bounding boxes
+﻿DONE Polygon collision detection
+DONE Polygon bounding boxes
+
+TODO Move and MoveTo methods for GameObject which sets X and Y
+TODO Make GameObject X and Y into a position vector
+TODO Make GameObject X and Y read only properties wrapping the position vector
