@@ -162,6 +162,11 @@ namespace MiniGameSharp
             _gameObjects.Add(gameObject);
         }
 
+        protected void RemoveGameObject(GameObject gameObject)
+        {
+            _gameObjects.Remove(gameObject);
+        }
+
         public bool IsKeyDown(Key key)
         {
             if (_form.IsDisposed || _isShuttingDown)
@@ -187,7 +192,7 @@ namespace MiniGameSharp
         {
             _isPaused = true;
         }
-        
+
         protected void Resume()
         {
             _isPaused = false;

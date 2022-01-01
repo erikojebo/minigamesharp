@@ -6,3 +6,4 @@ TODO Make GameObject X and Y into a position vector
 TODO Make GameObject X and Y read only properties wrapping the position vector
 TODO Disable/destroy bullets that have left the game area
 TODO Avoid spawning an unlimited number of bullets over time (reuse or remove)
+TODO Make sure the player does not die instantly of asteroid spawing just next to the ship

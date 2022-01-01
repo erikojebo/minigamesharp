@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using MiniGameSharp.Math;
 using MiniGameSharp.Shapes;
@@ -100,11 +101,22 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                 _canFire = true;
             }
 
-            foreach (var asteroid in _asteroids)
+            foreach (var asteroid in _asteroids.ToList())
             {
                 if (asteroid.HasCollidedWith(_ship))
                 {
                     Pause();
+                }
+
+                foreach (var bullet in _bullets.ToList())
+                {
+                    if (asteroid.HasCollidedWith(bullet))
+                    {
+                        _bullets.Remove(bullet);
+                        _asteroids.Remove(asteroid);
+                        RemoveGameObject(bullet);
+                        RemoveGameObject(asteroid);
+                    }
                 }
             }
 

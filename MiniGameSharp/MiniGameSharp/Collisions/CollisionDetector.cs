@@ -23,6 +23,14 @@ namespace MiniGameSharp.Collisions
                 }
             }
 
+            foreach (var corner in box2.Corners)
+            {
+                if (IsCollision(corner, box1))
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
 
@@ -41,7 +49,7 @@ namespace MiniGameSharp.Collisions
                 if (line.XMax < v.X)
                 {
                     leftIntersections++;
-                } 
+                }
                 else if (line.XMin > v.X)
                 {
                     // Do nothing, it is enough to track the intersections to one side of the point
