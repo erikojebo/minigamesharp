@@ -15,17 +15,21 @@ namespace MiniGameSharp.Collisions
 
         public static bool IsCollision(BoundingBoxPolygon box1, BoundingBoxPolygon box2)
         {
+            foreach (var corner in box1.Corners)
+            {
+                if (IsCollision(corner, box2))
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
 
         public static bool IsCollision(Vector v, BoundingBoxPolygon box)
         {
             // Is point within polygon?
-
-            var intersectionLineY = v.Y;
-
             var leftIntersections = 0;
-            var rightIntersections = 0;
 
             foreach (var line in box.Lines)
             {
@@ -34,18 +38,13 @@ namespace MiniGameSharp.Collisions
                     continue;
                 }
 
-                // if (line.Y1 == v.Y || line.Y2 == v.Y)
-                // {
-                //     return true; // Is this a collision?
-                // }
-
                 if (line.XMax < v.X)
                 {
                     leftIntersections++;
                 } 
                 else if (line.XMin > v.X)
                 {
-                    rightIntersections++;
+                    // Do nothing, it is enough to track the intersections to one side of the point
                 }
                 else
                 {

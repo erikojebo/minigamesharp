@@ -14,6 +14,7 @@ namespace MiniGameSharp
         private readonly GameForm _form;
         private readonly List<Shape> _shapes = new();
         private bool _isShuttingDown;
+        private bool _isPaused = false;
 
         protected Game()
         {
@@ -130,6 +131,9 @@ namespace MiniGameSharp
 
         private void PerformUpdate()
         {
+            if (_isPaused)
+                return;
+            
             foreach (var shape in _shapes)
             {
                 shape.X += shape.Velocity.X;
@@ -176,6 +180,16 @@ namespace MiniGameSharp
                 
                 return false;
             }
+        }
+
+        protected void Pause()
+        {
+            _isPaused = true;
+        }
+        
+        protected void Resume()
+        {
+            _isPaused = false;
         }
     }
 }

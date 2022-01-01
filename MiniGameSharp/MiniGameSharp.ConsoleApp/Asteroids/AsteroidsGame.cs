@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Input;
-using MiniGameSharp.Collisions;
 using MiniGameSharp.Math;
 using MiniGameSharp.Shapes;
 using Rectangle = MiniGameSharp.Shapes.Rectangle;
@@ -77,7 +76,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
             {
                 if (asteroid.HasCollidedWith(_shipTriangle))
                 {
-                    
+                    Pause();
                 }
             }
 
