@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Input;
 using MiniGameSharp.Math;
 using MiniGameSharp.Shapes;
+using Color = System.Drawing.Color;
 using Rectangle = MiniGameSharp.Shapes.Rectangle;
 
 namespace MiniGameSharp.ConsoleApp.Asteroids
@@ -13,9 +13,12 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
         private Polygon _ship;
         private readonly Vector _upVector = new(0, -1);
         private readonly List<Polygon> _asteroids = new();
+        private readonly List<Rectangle> _bullets = new();
         private readonly List<GameObject> _boundsWrapObjects = new();
 
         private Random _random = new();
+
+        private bool _canFire = true;
 
         public AsteroidsGame()
         {
@@ -28,29 +31,20 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
 
         protected override void OnStart()
         {
-            const float shipHeight = 40;
-            const float shipWidth = 20;
+            InitializeShip();
+            InitializeAsteroids();
+        }
 
-            _ship = new Polygon(Width / 2f, Height / 2f,
-                new Vector(-shipWidth / 2, shipHeight * 1 / 3f),
-                new Vector(shipWidth / 2, shipHeight * 1 / 3f),
-                new Vector(0, -shipHeight * 2 / 3f));
-
-            _boundsWrapObjects.Add(_ship);
-
-            AddGameObject(_ship);
-
-            _ship.Velocity = _upVector.Scale(0);
-
-
+        private void InitializeAsteroids()
+        {
             for (int i = 0; i < 10; i++)
             {
                 var startPosition = new Vector(_random.Next(Width), _random.Next(Height));
 
                 const int maxAsteroidRadius = 20;
                 const int minAsteroidRadius = 10;
-                
-                var asteroid = ObjectFactory.CreateAsteroid(startPosition.X, startPosition.Y, 
+
+                var asteroid = ObjectFactory.CreateAsteroid(startPosition.X, startPosition.Y,
                     minAsteroidRadius, maxAsteroidRadius, _random);
 
                 AddGameObject(asteroid);
@@ -58,6 +52,15 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                 _asteroids.Add(asteroid);
                 _boundsWrapObjects.Add(asteroid);
             }
+        }
+
+        private void InitializeShip()
+        {
+            _ship = ObjectFactory.CreateShip(Width / 2f, Height / 2f);
+
+            _boundsWrapObjects.Add(_ship);
+
+            AddGameObject(_ship);
         }
 
         protected override void OnUpdate()
@@ -78,6 +81,23 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                 var thrustVector = _upVector.Rotate(_ship.Angle).Scale(thrustVectorScale);
 
                 _ship.Velocity = _ship.Velocity.Add(thrustVector).CapLength(7);
+            }
+
+            if (IsKeyDown(Key.Space))
+            {
+                if (_canFire)
+                {
+                    var bullet = ObjectFactory.CreateBullet(_ship);
+
+                    _bullets.Add(bullet);
+                    AddGameObject(bullet);
+
+                    _canFire = false;
+                }
+            }
+            else
+            {
+                _canFire = true;
             }
 
             foreach (var asteroid in _asteroids)

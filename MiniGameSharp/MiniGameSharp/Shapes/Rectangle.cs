@@ -10,7 +10,7 @@ namespace MiniGameSharp.Shapes
         {
         }
 
-        public Rectangle(int x, int y, int width, int height, Color color)
+        public Rectangle(float x, float y, int width, int height, Color color)
         {
             X = x;
             Y = y;
