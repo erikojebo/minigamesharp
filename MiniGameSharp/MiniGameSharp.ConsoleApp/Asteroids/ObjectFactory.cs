@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using MiniGameSharp.ConsoleApp.Asteroids.GameObjects;
 using MiniGameSharp.Math;
 using MiniGameSharp.Shapes;
 using Rectangle = MiniGameSharp.Shapes.Rectangle;
@@ -12,7 +13,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
         public const float ShipHeight = 40;
         public const float ShipWidth = 20;
 
-        public static Polygon CreateAsteroid(float x, float y, int minRadius, int maxRadius, Random random)
+        public static Asteroid CreateAsteroid(float x, float y, int minRadius, int maxRadius, int size, Random random)
         {
             var cornerCount = random.Next(5, 10);
 
@@ -27,7 +28,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                 corners.Add(cornerRelativeToCenter);
             }
 
-            var asteroid = new Polygon(x, y, corners.ToArray());
+            var asteroid = new Asteroid(x, y, size, corners.ToArray());
 
             // var asteroidRectangle = new Rectangle( 40, 40, Color.WhiteSmoke);
 
@@ -35,14 +36,15 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                 random.Next(-100, 100) / 100f,
                 random.Next(-100, 100) / 100f);
 
-            asteroid.Velocity = directionVector.Scale(2);
+            var asteroidSpeed = 2;
+            asteroid.Velocity = directionVector.Scale(asteroidSpeed);
 
             return asteroid;
         }
 
-        public static Polygon CreateShip(float x, float y)
+        public static Ship CreateShip(float x, float y)
         {
-            var ship = new Polygon(x, y,
+            var ship = new Ship(x, y,
                 new Vector(-ShipWidth / 2, ShipHeight * 1 / 3f),
                 new Vector(ShipWidth / 2, ShipHeight * 1 / 3f),
                 new Vector(0, -ShipHeight * 2 / 3f));
@@ -52,7 +54,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
             return ship;
         }
 
-        public static Rectangle CreateBullet(Polygon ship)
+        public static Bullet CreateBullet(Ship ship)
         {
             var gunPositionRelativeToCenterRotated = new Vector(0, ShipHeight * -2 / 3f)
                 .Rotate(ship.Angle);
@@ -60,11 +62,13 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
             var gunPositionAbsolute = gunPositionRelativeToCenterRotated
                 .Add(new Vector(ship.X, ship.Y));
 
-            var bullet = new Rectangle(gunPositionAbsolute.X, gunPositionAbsolute.Y,
+            var bullet = new Bullet(gunPositionAbsolute.X, gunPositionAbsolute.Y,
                 1, 5, Color.WhiteSmoke);
 
             bullet.Angle = ship.Angle;
-            bullet.Velocity = gunPositionRelativeToCenterRotated.Resize(3);
+            
+            var bulletSpeed = 7;
+            bullet.Velocity = gunPositionRelativeToCenterRotated.Resize(bulletSpeed);
 
             return bullet;
         }

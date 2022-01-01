@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using MiniGameSharp.ConsoleApp.Asteroids.GameObjects;
 using MiniGameSharp.Math;
 using MiniGameSharp.Shapes;
 using Color = System.Drawing.Color;
-using Rectangle = MiniGameSharp.Shapes.Rectangle;
 
 namespace MiniGameSharp.ConsoleApp.Asteroids
 {
     public class AsteroidsGame : Game
     {
-        private Polygon _ship;
+        private Ship _ship;
         private readonly Vector _upVector = new(0, -1);
-        private readonly List<Polygon> _asteroids = new();
-        private readonly List<Rectangle> _bullets = new();
+        private readonly List<Asteroid> _asteroids = new();
+        private readonly List<Bullet> _bullets = new();
         private readonly List<GameObject> _boundsWrapObjects = new();
 
         private Random _random = new();
@@ -46,7 +46,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                 const int minAsteroidRadius = 10;
 
                 var asteroid = ObjectFactory.CreateAsteroid(startPosition.X, startPosition.Y,
-                    minAsteroidRadius, maxAsteroidRadius, _random);
+                    minAsteroidRadius, maxAsteroidRadius, 2, _random);
 
                 AddGameObject(asteroid);
 
@@ -116,6 +116,21 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                         _asteroids.Remove(asteroid);
                         RemoveGameObject(bullet);
                         RemoveGameObject(asteroid);
+
+                        if (asteroid.Size > 1)
+                        {
+                            var asteroid1 = ObjectFactory.CreateAsteroid(asteroid.X, asteroid.Y, 5, 10, asteroid.Size - 1, _random);
+                            var asteroid2 = ObjectFactory.CreateAsteroid(asteroid.X, asteroid.Y, 5, 10, asteroid.Size - 1, _random);
+
+                            asteroid1.Velocity = asteroid.Velocity.Rotate(_random.Next(0, 180));
+                            asteroid2.Velocity = asteroid.Velocity.Rotate(_random.Next(180, 360));
+                            
+                            _asteroids.Add(asteroid1);
+                            _asteroids.Add(asteroid2);
+                            
+                            AddGameObject(asteroid1);
+                            AddGameObject(asteroid2);
+                        }
                     }
                 }
             }
