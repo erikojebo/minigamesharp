@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using MiniGameSharp.ConsoleApp.Asteroids.GameObjects;
 using MiniGameSharp.Math;
-using MiniGameSharp.Shapes;
-using Rectangle = MiniGameSharp.Shapes.Rectangle;
 
 namespace MiniGameSharp.ConsoleApp.Asteroids
 {
