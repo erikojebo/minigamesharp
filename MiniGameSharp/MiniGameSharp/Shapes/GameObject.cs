@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using MiniGameSharp.Collisions;
 using MiniGameSharp.Math;
 
 namespace MiniGameSharp.Shapes
@@ -14,5 +15,10 @@ namespace MiniGameSharp.Shapes
         public abstract void Render(Graphics graphics);
 
         public abstract BoundingBoxPolygon BoundingBox();
+        
+        public bool HasCollidedWith(GameObject otherObject)
+        {
+            return CollisionDetector.IsCollision(BoundingBox(), otherObject.BoundingBox());
+        }
     }
 }
