@@ -11,4 +11,3 @@ _ReSharper*
 .DS_Store
 /build
 .vs
-/Resources/Sounds/*.mp3

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Media;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -12,15 +13,20 @@ namespace MiniGameSharp
     public class Game
     {
         private readonly GameForm _form;
+
         private readonly List<GameObject> _gameObjects = new();
+        private Dictionary<string, SoundPlayer> _sounds = new();
+
         private bool _isShuttingDown;
         private bool _isPaused = false;
-
+        private int _height;
+        
         protected Game()
         {
             _form = new GameForm(OnPaint);
+            _height = _form.Height - GetFormHeightOutsideClientArea();
         }
-        
+
         public Color BackgroundColor { get; set; }
 
         public int Width
@@ -28,25 +34,32 @@ namespace MiniGameSharp
             get => _form.Width;
             set => _form.Width = value;
         }
-        
+
         public int Height
         {
-            get => _form.Height;
-            set => _form.Height = value;
+            get => _height;
+            set
+            {
+                _height = value;
+                _form.Height = value + GetFormHeightOutsideClientArea();
+                var actual = _form.ClientSize.Height;
+            }
         }
-        
+
         public int Left
         {
             get => _form.Left;
             set => _form.Left = value;
         }
-        
+
         public int Top
         {
             get => _form.Top;
             set => _form.Top = value;
         }
-        
+
+        public bool IsPaused => _isPaused;
+
         public void Run()
         {
             var cancellationTokenSource = new CancellationTokenSource();
@@ -54,13 +67,13 @@ namespace MiniGameSharp
             var thread = new Thread(StartGameLoop);
             thread.Start(cancellationToken);
 
-            _form.Closed += (o,e) =>
+            _form.Closed += (o, e) =>
             {
                 Console.WriteLine("Shutting down...");
                 _isShuttingDown = true;
                 cancellationTokenSource.Cancel();
             };
-            
+
             Application.Run(_form);
         }
 
@@ -69,9 +82,9 @@ namespace MiniGameSharp
             var cancellationToken = (CancellationToken)cancellationTokenObj;
 
             var stopwatch = new Stopwatch();
-            
+
             OnStart();
-            
+
             stopwatch.Start();
 
             long oldTime = 0;
@@ -83,7 +96,7 @@ namespace MiniGameSharp
             int frameCounter = 0;
             int updatesCounter = 0;
             long counterAccumulator = 0;
-            
+
             while (!cancellationToken.IsCancellationRequested)
             {
                 newTime = stopwatch.ElapsedMilliseconds;
@@ -93,7 +106,7 @@ namespace MiniGameSharp
 
                 counterAccumulator += deltaTime;
                 frameCounter += 1;
-                
+
                 if (counterAccumulator > 1000)
                 {
                     Console.WriteLine("FPS:" + frameCounter + "\tUpdates per second: " + updatesCounter);
@@ -103,11 +116,11 @@ namespace MiniGameSharp
                 }
 
                 var shouldRender = false;
-                
-                while(accumulator > timePerFrame)
+
+                while (accumulator > timePerFrame)
                 {
                     shouldRender = true;
-                    
+
                     PerformUpdate();
                     accumulator -= timePerFrame;
                     updatesCounter += 1;
@@ -129,20 +142,25 @@ namespace MiniGameSharp
         {
         }
 
-        private void PerformUpdate()
+        protected virtual void OnRestart()
         {
-            if (_isPaused)
-                return;
             
-            foreach (var obj in _gameObjects)
-            {
-                obj.X += obj.Velocity.X;
-                obj.Y += obj.Velocity.Y;
-            }
-            
-            OnUpdate();
         }
         
+        private void PerformUpdate()
+        {
+            if (!_isPaused)
+            {
+                foreach (var obj in _gameObjects)
+                {
+                    obj.X += obj.Velocity.X;
+                    obj.Y += obj.Velocity.Y;
+                }
+            }
+
+            OnUpdate();
+        }
+
         protected virtual void OnUpdate()
         {
         }
@@ -150,7 +168,7 @@ namespace MiniGameSharp
         private void OnPaint(Graphics g)
         {
             g.Clear(BackgroundColor);
-            
+
             foreach (var shape in _gameObjects)
             {
                 shape.Render(g);
@@ -176,14 +194,14 @@ namespace MiniGameSharp
             {
                 bool isKeyDown = false;
                 _form.Invoke((Action)(() => isKeyDown = Keyboard.IsKeyDown(key)));
-            
+
                 return isKeyDown;
             }
             catch (Exception)
             {
                 if (!_form.IsDisposed && !_isShuttingDown)
                     Console.Write("Could not read IsKeyDown");
-                
+
                 return false;
             }
         }
@@ -196,6 +214,40 @@ namespace MiniGameSharp
         protected void Resume()
         {
             _isPaused = false;
+        }
+
+        protected void Reset()
+        {
+            _gameObjects.Clear();
+            _sounds.Clear();
+
+            OnStart();
+
+            Resume();
+        }
+
+        protected void AddSound(string filePath, string name)
+        {
+            var soundPlayer = new SoundPlayer(filePath);
+            
+            soundPlayer.LoadAsync();
+            
+            _sounds.Add(name, soundPlayer);
+        }
+
+        protected void PlaySound(string name)
+        {
+            if (!_sounds.ContainsKey(name))
+            {
+                throw new Exception($"No sound added with the name {name}. Call AddSound in OnStart before calling PlaySound");
+            }
+
+            _sounds[name].Play();
+        }
+
+        private int GetFormHeightOutsideClientArea()
+        {
+            return _form.Height - _form.ClientSize.Height;
         }
     }
 }

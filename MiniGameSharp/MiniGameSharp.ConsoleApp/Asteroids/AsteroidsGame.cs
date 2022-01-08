@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using MiniGameSharp.ConsoleApp.Asteroids.GameObjects;
@@ -12,6 +13,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
     public class AsteroidsGame : Game
     {
         private Ship _ship;
+        private TextObject _messageText;
         private readonly Vector _upVector = new(0, -1);
         private readonly List<Asteroid> _asteroids = new();
         private readonly List<Bullet> _bullets = new();
@@ -27,13 +29,39 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
             Left = 0;
             Top = 0;
             Width = 1000;
-            Height = 900;
+            Height = 800;
         }
 
         protected override void OnStart()
         {
+            var soundDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../../Resources/Sounds");
+            // AddSound($"{soundDirectory}/explosion.wav", "explosion");
+            AddSound($"{soundDirectory}/pewpew_1.wav", "blaster");
+            
+            ResetObjects();
+        }
+
+        private void ResetObjects()
+        {
+            _asteroids.Clear();
+            _bullets.Clear();
+            _boundsWrapObjects.Clear();
+            
             InitializeShip();
             InitializeAsteroids();
+            InitializeTextObjects();
+        }
+
+        private void InitializeTextObjects()
+        {
+            _messageText = new TextObject(10, Height - 30, "", 12, Color.WhiteSmoke);
+            
+            AddGameObject(_messageText);
+        }
+
+        protected override void OnRestart()
+        {
+            ResetObjects();
         }
 
         private void InitializeAsteroids()
@@ -48,10 +76,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                 var asteroid = ObjectFactory.CreateAsteroid(startPosition.X, startPosition.Y,
                     minAsteroidRadius, maxAsteroidRadius, 2, _random);
 
-                AddGameObject(asteroid);
-
-                _asteroids.Add(asteroid);
-                _boundsWrapObjects.Add(asteroid);
+                AddAsteroid(asteroid);
             }
         }
 
@@ -66,6 +91,14 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
 
         protected override void OnUpdate()
         {
+            if (IsPaused && IsKeyDown(Key.R))
+            {
+                Reset();
+            }
+
+            if (IsPaused)
+                return;
+            
             if (IsKeyDown(Key.Left))
             {
                 _ship.Angle -= 5;
@@ -94,6 +127,8 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                     AddGameObject(bullet);
 
                     _canFire = false;
+                    
+                    PlaySound("blaster");
                 }
             }
             else
@@ -106,6 +141,8 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                 if (asteroid.HasCollidedWith(_ship))
                 {
                     Pause();
+                    
+                    _messageText.Text = "Game Over. Press R to restart the game";
                 }
 
                 foreach (var bullet in _bullets.ToList())
@@ -125,11 +162,8 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                             asteroid1.Velocity = asteroid.Velocity.Rotate(_random.Next(0, 180));
                             asteroid2.Velocity = asteroid.Velocity.Rotate(_random.Next(180, 360));
                             
-                            _asteroids.Add(asteroid1);
-                            _asteroids.Add(asteroid2);
-                            
-                            AddGameObject(asteroid1);
-                            AddGameObject(asteroid2);
+                            AddAsteroid(asteroid1);
+                            AddAsteroid(asteroid2);
                         }
                     }
                 }
@@ -139,6 +173,14 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
             {
                 WrapBounds(obj);
             }
+        }
+
+        private void AddAsteroid(Asteroid asteroid)
+        {
+            _asteroids.Add(asteroid);
+            _boundsWrapObjects.Add(asteroid);
+            
+            AddGameObject(asteroid);
         }
 
         private void WrapBounds(GameObject asteroid)
