@@ -3,7 +3,6 @@
 *.suo
 *.user
 _ReSharper*
-src/Blog/Images
 .gradle
 /local.properties
 /.idea/workspace.xml
@@ -12,3 +11,4 @@ src/Blog/Images
 .DS_Store
 /build
 .vs
+/Resources/Sounds/*.mp3
