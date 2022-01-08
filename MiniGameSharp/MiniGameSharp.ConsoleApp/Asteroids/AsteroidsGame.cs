@@ -37,7 +37,7 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
         protected override void OnStart()
         {
             var soundDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../../Resources/Sounds");
-            // AddSound($"{soundDirectory}/explosion.wav", "explosion");
+            AddSound($"{soundDirectory}/atari_boom.wav", "explosion");
             AddSound($"{soundDirectory}/pewpew_1.wav", "blaster");
 
             ResetObjects();
@@ -157,6 +157,8 @@ namespace MiniGameSharp.ConsoleApp.Asteroids
                     {
                         IncrementScore(10);
 
+                        PlaySound("explosion");
+                        
                         _bullets.Remove(bullet);
                         _asteroids.Remove(asteroid);
                         RemoveGameObject(bullet);

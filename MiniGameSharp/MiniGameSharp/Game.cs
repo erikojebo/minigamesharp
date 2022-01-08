@@ -109,7 +109,7 @@ namespace MiniGameSharp
 
                 if (counterAccumulator > 1000)
                 {
-                    Console.WriteLine("FPS:" + frameCounter + "\tUpdates per second: " + updatesCounter);
+                    // Console.WriteLine("FPS:" + frameCounter + "\tUpdates per second: " + updatesCounter);
                     frameCounter = 0;
                     updatesCounter = 0;
                     counterAccumulator = 0;

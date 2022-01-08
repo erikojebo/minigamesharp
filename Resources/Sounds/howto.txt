@@ -1,3 +1,0 @@
-Check the source code for referenced sound files and place appropriately named files in this directory.
-
-Sounds are not included to avoid copyright issues.
