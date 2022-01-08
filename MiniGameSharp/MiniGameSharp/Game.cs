@@ -7,6 +7,8 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Input;
 using MiniGameSharp.Shapes;
+using MiniGameSharp.Sounds;
+using NAudio.Wave;
 
 namespace MiniGameSharp
 {
@@ -15,7 +17,7 @@ namespace MiniGameSharp
         private readonly GameForm _form;
 
         private readonly List<GameObject> _gameObjects = new();
-        private Dictionary<string, SoundPlayer> _sounds = new();
+        private Dictionary<string, CachedSound> _sounds = new();
 
         private bool _isShuttingDown;
         private bool _isPaused = false;
@@ -74,6 +76,10 @@ namespace MiniGameSharp
                 cancellationTokenSource.Cancel();
             };
 
+            // Play an empty sound to initialize the sound stuff and avoid lag for the first
+            // sound to play in the actual game
+            AudioPlaybackEngine.Instance.PlaySound(new CachedSound());
+            
             Application.Run(_form);
         }
 
@@ -228,11 +234,9 @@ namespace MiniGameSharp
 
         protected void AddSound(string filePath, string name)
         {
-            var soundPlayer = new SoundPlayer(filePath);
+            var cachedSound = new CachedSound(filePath);
             
-            soundPlayer.LoadAsync();
-            
-            _sounds.Add(name, soundPlayer);
+            _sounds.Add(name, cachedSound);
         }
 
         protected void PlaySound(string name)
@@ -241,8 +245,8 @@ namespace MiniGameSharp
             {
                 throw new Exception($"No sound added with the name {name}. Call AddSound in OnStart before calling PlaySound");
             }
-
-            _sounds[name].Play();
+            
+            AudioPlaybackEngine.Instance.PlaySound(_sounds[name]);
         }
 
         private int GetFormHeightOutsideClientArea()
